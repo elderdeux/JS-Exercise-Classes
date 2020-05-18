@@ -41,8 +41,47 @@ class Airplane {
 */
 
 class Person {
+  constructor(name, age){
+    this.name = name;
+    this.age = age;
+    this.stomach = [];
+  } 
+  eat(food){
+    //this.stomach = this.stomach.push(food); 
 
+    if(this.stomach.length < 10){
+      return this.stomach.push(food); 
+    }
+  }
+  poop(){
+    this.stomach = []; 
+  }
+  toString(){
+    return `${this.name}, ${this.age}`;
+  }
 }
+
+const david = new Person('David', 32);
+
+console.log(david);
+david.eat("banana");
+david.eat("halal");
+david.eat("cake");
+david.eat("pizza");
+david.eat("peaches");
+david.eat("berries");
+david.eat("chinese");
+david.eat("coffee");
+david.eat("monster");
+david.eat("salad");
+console.log(david.stomach);
+
+david.eat("pasta");
+console.log(david.stomach.length);
+
+david.poop();
+console.log(david.stomach);
+console.log(david.toString());
 
 /*
   TASK 2
@@ -59,8 +98,45 @@ class Person {
 */
 
 class Car {
-
+  constructor(model, milesPerGallon){
+    this.model = model;
+    this.milesPerGallon = milesPerGallon;
+    this.tank = 0;
+    this.odometer = 0; 
+  }
+  fill(gallons){
+    this.tank = this.tank + gallons;
+  }
+  drive(distance){
+    let maxDistance = this.tank * this.milesPerGallon;
+    if(distance < maxDistance){
+      this.odometer = this.odometer + distance;
+    
+      const driveMiles = distance / this.milesPerGallon;
+      this.tank = this.tank - driveMiles;
+ 
+    } else {
+      this.odometer = this.odometer + maxDistance;
+      this.tank = 0;
+      return `I ran out of fuel at ${this.odometer} miles!`
+    }
+  }
 }
+
+
+const audi = new Car('Audi', 35); 
+
+console.log(audi);
+audi.fill(10); 
+console.log(audi);
+audi.drive(100);
+console.log(audi); 
+audi.drive(100);
+console.log(audi); 
+console.log(audi.drive(300));
+console.log(audi);
+
+
 
 /*
   TASK 3
@@ -75,8 +151,24 @@ class Car {
         + {name} and {location} of course come from the instance's own properties.
 */
 class Lambdasian {
-
+  constructor(attrs){
+    this.name = attrs.name;
+    this.age = attrs.age;
+    this.location = attrs.location; 
+  }
+  speak(){
+    return `Hello my name is ${this.name}, I am from ${this.location}.`
+  }
 }
+
+const elderDeux = new Lambdasian({
+  name: 'Elder Deux',
+  age: 25,
+  location: 'NYC'
+})
+
+console.log(elderDeux);
+console.log(elderDeux.speak()); 
 
 /*
   TASK 4
@@ -92,9 +184,47 @@ class Lambdasian {
         + `demo` receives a `subject` string as an argument and returns the phrase 'Today we are learning about {subject}' where subject is the param passed in.
         + `grade` receives a `student` object and a `subject` string as arguments and returns '{student.name} receives a perfect score on {subject}'
 */
-class Instructor {
+class Instructor extends Lambdasian{
+  constructor(attributes){
+    super(attributes)
+    this.specialty = attributes.specialty;
+    this.favLanguage = attributes.favLanguage;
+    this.catchPhrase = attributes.catchPhrase;   
+  }
+  demo(subject){
+    return `Today we are learning about ${subject}.`
+  }
+  grade(student, subject){
+    return `${student.name} receives a perfect score on ${subject}.`
+  }
 
+  // STRETCH # 2
+  randomPoints(student){
+    return student.grade + Math.floor(Math.random() * 101) || student.grade - Math.floor(Math.random() * 101);
+  }
 }
+
+const matt = new Instructor({
+  name: 'Matthew Ehrlich',
+  age: 29,
+  location: 'Florida',
+  specialty: 'Full Stack',
+  favLanguage: 'JavaScript',
+  catchPhrase: 'Filthy Rich'
+})
+
+console.log(matt);
+console.log(matt.speak()); 
+console.log(matt.demo('react')); 
+
+const student = {
+  name: 'Elder Deux',
+  grade: 95
+}
+
+console.log(matt.grade(student, 'python'));
+console.log(matt.randomPoints(student));
+
 
 /*
   TASK 5
@@ -111,9 +241,54 @@ class Instructor {
         + `PRAssignment` a method that receives a subject as an argument and returns `student.name has submitted a PR for {subject}`
         + `sprintChallenge` similar to PRAssignment but returns `student.name has begun sprint challenge on {subject}`
 */
-class Student {
+class Student extends Lambdasian{
+  constructor(attributes){
+    super(attributes)
+    this.previousBackground = attributes.previousBackground;
+    this.className = attributes.className; 
+    this.favSubjects = attributes.favSubjects;
 
+    //STRETCH # 1
+    this.grade = attributes.grade; 
+  }
+  listSubjects(){
+    return `Loving ${this.favSubjects}!`;
+  }
+  PRAssignment(subject){
+    return `${this.name} has submitted a PR for ${subject}.`;
+  }
+  sprintChallenge(subject){
+    return `${this.name} has begun sprint challenge on ${subject}.`; 
+  }
+
+  // STRETCH # 3 
+  graduate(){
+    if(this.grade > 70){
+      return `Congratulations, ${this.name}, for graduating with a grade of ${this.grade} from Lambda School!`
+    } else {
+      return `You're almost there, ${this.name}! You can do this!`
+    }
+  }
 }
+
+const danielle = new Student({
+  name: 'Danielle',
+  age: 26,
+  location: 'NYC',
+  previousBackground: 'DoorDasher',
+  className: 'Web33',
+  favSubjects: ['HTML', 'CSS', 'JS'],
+  grade: 99
+})
+
+console.log(danielle);
+console.log(danielle.speak());
+console.log(danielle.listSubjects());
+console.log(danielle.PRAssignment('React'));
+console.log(danielle.sprintChallenge('Redux'));
+
+console.log(matt.randomPoints(danielle));  
+console.log(danielle.graduate());
 
 /*
   TASK 6
@@ -128,9 +303,40 @@ class Student {
         + `standUp` a method that takes in a slack channel and returns `{name} announces to {channel}, @channel standy times!`
         + `debugsCode` a method that takes in a student object and a subject and returns `{name} debugs {student.name}'s code on {subject}`
 */
-class ProjectManager {
-
+class ProjectManager extends Instructor{
+  constructor(attributes){
+    super(attributes)
+    this.gradClassName = attributes.gradClassName;
+    this.favInstructor = attributes.favInstructor; 
+  }
+  standUp(channel){
+    return `${this.name} announces to ${channel}, @channel standy times!`
+  }
+  debugsCode(student, subject){
+    return `${this.name} debugs ${student.name}'s code on ${subject}.`
+  }
 }
+
+const sage = new ProjectManager({
+  name: 'Sage',
+  age: 25,
+  location: 'Las Vegas',
+  specialty: 'React',
+  favLanguage: 'Javascript',
+  catchPhrase: 'Standy Time!'
+})
+
+console.log(sage);
+console.log(sage.speak());
+console.log(sage.demo('DOM'));
+console.log(sage.grade(student, 'DOM'));
+console.log(sage.standUp('React'));
+
+const student2 = {
+  name: 'Peter Parker',
+}
+
+console.log(sage.debugsCode(student2, 'DOM')); 
 
 /*
   STRETCH PROBLEM (no tests!)
